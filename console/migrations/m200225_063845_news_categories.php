@@ -3,17 +3,15 @@
 use yii\db\Migration;
 
 /**
- * Class m200224_122143_news_categories
+ * Class m200225_063845_news_categories
  */
-class m200224_122143_news_categories extends Migration
+class m200225_063845_news_categories extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createNews();
-        $this->createCategories();
         $this->createNewsCategories();
     }
 
@@ -22,28 +20,7 @@ class m200224_122143_news_categories extends Migration
      */
     public function safeDown()
     {
-        $this->dropTable('news');
-        $this->dropTable('categories');
         $this->dropTable('news_categories');
-    }
-
-    private function createNews()
-    {
-        $this->createTable('news', [
-            'id' => $this->primaryKey(),
-            'title'=>$this->string(),
-            'description'=>$this->string()
-        ]);
-        $this->alterColumn('news', 'id', $this->integer() . ' NOT NULL AUTO_INCREMENT');
-    }
-
-    private function createCategories()
-    {
-        $this->createTable('categories', [
-            'id' => $this->primaryKey(),
-            'name' => $this->string()
-        ]);
-        $this->alterColumn('categories', 'id', $this->integer() . ' NOT NULL AUTO_INCREMENT');
     }
 
     private function createNewsCategories()
@@ -53,7 +30,7 @@ class m200224_122143_news_categories extends Migration
             'news_id' => $this->integer(),
             'categories_id' => $this->integer()
         ]);
-        //if there will be 2 primary keys (author_id and book_id) without id - migrate will done successfully
+
         $this->addForeignKey(
             'FK_news',
             'news_categories',
@@ -63,6 +40,7 @@ class m200224_122143_news_categories extends Migration
             'CASCADE',
             'CASCADE'
         );
+
         $this->addForeignKey(
             'FK_categories',
             'news_categories',
@@ -72,7 +50,6 @@ class m200224_122143_news_categories extends Migration
             'CASCADE',
             'CASCADE'
         );
-        $this->alterColumn('news_categories', 'id', $this->integer() . 'NOT NULL AUTO_INCREMENT');
     }
 
     /*
@@ -84,7 +61,7 @@ class m200224_122143_news_categories extends Migration
 
     public function down()
     {
-        echo "m200224_122143_news_categories cannot be reverted.\n";
+        echo "m200225_063845_news_categories cannot be reverted.\n";
 
         return false;
     }
