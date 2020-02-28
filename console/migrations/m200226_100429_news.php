@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m200225_063609_news
+ * Class m200226_100429_news
  */
-class m200225_063609_news extends Migration
+class m200226_100429_news extends Migration
 {
     /**
      * {@inheritdoc}
@@ -28,7 +28,8 @@ class m200225_063609_news extends Migration
         $this->createTable('news', [
             'id' => $this->primaryKey(),
             'title'=>$this->string(),
-            'description'=>$this->string()
+            'description'=>$this->string(),
+            'image'=>$this->string()
         ]);
     }
 
@@ -41,7 +42,7 @@ class m200225_063609_news extends Migration
 
     public function down()
     {
-        echo "m200225_063609_news cannot be reverted.\n";
+        echo "m200226_100429_news cannot be reverted.\n";
 
         return false;
     }

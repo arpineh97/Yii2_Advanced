@@ -8,6 +8,7 @@ use backend\models\NewsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * NewsController implements the CRUD actions for News model.
@@ -21,7 +22,7 @@ class NewsController extends Controller
     {
         return [
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'delete' => ['POST'],
                 ],
@@ -65,9 +66,14 @@ class NewsController extends Controller
     public function actionCreate()
     {
         $model = new News();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                $model->image = UploadedFile::getInstance($model, 'image');
+                if ($model->image) {
+                    $model->uploadImage($model->id);
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('create', [
@@ -86,8 +92,15 @@ class NewsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->save()) {
+                $model->image = UploadedFile::getInstance($model, 'image');
+                if ($model->image) {
+                    $model->deleteImage();
+                    $model->uploadImage($model->id);
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
 
         return $this->render('update', [
@@ -104,7 +117,9 @@ class NewsController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->deleteImage();
+        $model->delete();
 
         return $this->redirect(['index']);
     }

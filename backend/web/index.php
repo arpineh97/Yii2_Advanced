@@ -15,3 +15,10 @@ $config = yii\helpers\ArrayHelper::merge(
 );
 
 (new yii\web\Application($config))->run();
+
+function debug($array){
+    echo "<pre>";
+    print_r($array);
+    echo "</pre>";
+    die;
+}

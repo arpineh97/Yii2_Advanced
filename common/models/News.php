@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "news".
@@ -16,6 +17,7 @@ use Yii;
 class News extends \yii\db\ActiveRecord
 {
     public $image;
+
     /**
      * {@inheritdoc}
      */
@@ -30,8 +32,10 @@ class News extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['title', 'description'], 'required'],
+            [['title', 'description', 'image'], 'safe'],
             [['title', 'description'], 'string', 'max' => 255],
-            ['image', 'safe'],
+            ['image', 'file', 'extensions' => ['jpg']],
         ];
     }
 
@@ -61,6 +65,21 @@ class News extends \yii\db\ActiveRecord
     public function getCategories()
     {
         return $this->hasMany(Category::class, ['id' => 'category_id'])->via('newsCategory');
+    }
+
+    public function uploadImage($name)
+    {
+        $path = Yii::getAlias('@frontend') . '/web/images/';
+        $this->image->saveAs(Yii::getAlias($path . $name . '.' . $this->image->extension));
+    }
+
+    public function deleteImage()
+    {
+        $img = glob(Yii::getAlias('@frontend') . '/web/images/' . $this->id . '.*');
+
+        if ($img) {
+            @unlink($img[0]);
+        }
     }
 
 }

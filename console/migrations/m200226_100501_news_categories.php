@@ -3,9 +3,9 @@
 use yii\db\Migration;
 
 /**
- * Class m200225_063845_news_categories
+ * Class m200226_100501_news_categories
  */
-class m200225_063845_news_categories extends Migration
+class m200226_100501_news_categories extends Migration
 {
     /**
      * {@inheritdoc}
@@ -61,7 +61,7 @@ class m200225_063845_news_categories extends Migration
 
     public function down()
     {
-        echo "m200225_063845_news_categories cannot be reverted.\n";
+        echo "m200226_100501_news_categories cannot be reverted.\n";
 
         return false;
     }
