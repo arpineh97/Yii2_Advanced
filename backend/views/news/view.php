@@ -37,8 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($model){
                     return '<img 
-                        src="/frontend/web/images/' . $model->id . ".jpg" . '" 
-                        alt=' . $model->id . ".jpg" . ' 
+                        src="' . $model->getImage() . '" 
+                        alt=' . $model->getImage() . ' 
                         height="100" width="100"
                         >';
                 }

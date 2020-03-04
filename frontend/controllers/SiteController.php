@@ -1,10 +1,13 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\Category;
+use common\models\News;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\data\ActiveDataProvider;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -75,6 +78,28 @@ class SiteController extends Controller
     public function actionIndex()
     {
         return $this->render('index');
+    }
+
+    public function actionCategory($id)
+    {
+        $category = Category::findOne(['id'=>$id]);
+        $dataProvider = new ActiveDataProvider([
+            'query' => $category->getLimitNews(),
+            'pagination' => [
+                'pageSize' => 5,
+            ]]);
+
+        return $this->render('category',compact('dataProvider', 'category'));
+    }
+
+    public function actionNews($id)
+    {
+        $news = News::findOne(['id'=>$id]);
+        if ($news) {
+            $news->hits++;
+            $news->save();
+        }
+        return $this->render('news', compact('news'));
     }
 
     /**

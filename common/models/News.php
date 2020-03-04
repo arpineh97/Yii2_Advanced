@@ -3,6 +3,8 @@
 namespace common\models;
 
 use Yii;
+use yii\behaviors\TimestampBehavior;
+use yii\helpers\FileHelper;
 use yii\web\UploadedFile;
 
 /**
@@ -34,8 +36,9 @@ class News extends \yii\db\ActiveRecord
         return [
             [['title', 'description'], 'required'],
             [['title', 'description', 'image'], 'safe'],
-            [['title', 'description'], 'string', 'max' => 255],
+            [['title', 'description'], 'string', 'max' => 500],
             ['image', 'file', 'extensions' => ['jpg']],
+            [['created_at', 'updated_at', 'hits'], 'integer'],
         ];
     }
 
@@ -48,7 +51,16 @@ class News extends \yii\db\ActiveRecord
             'id' => 'ID',
             'title' => 'Title',
             'description' => 'Description',
-            'image' => 'Image',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'hits' => 'Hits',
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::class,
         ];
     }
 
@@ -64,22 +76,35 @@ class News extends \yii\db\ActiveRecord
 
     public function getCategories()
     {
-        return $this->hasMany(Category::class, ['id' => 'category_id'])->via('newsCategory');
+//        return $this->hasMany(News::class, ['id' => 'news_id'])
+//            ->viaTable('categories', ['id' => 'categories_id']);
+        return $this->hasMany(Category::class, ['id' => 'category_id'])
+            ->via('newsCategory');
     }
 
     public function uploadImage($name)
     {
-        $path = Yii::getAlias('@frontend') . '/web/images/';
+        $path = Yii::getAlias('@frontend') . '/web/images/news/';
+        if (!is_dir($path)) {
+            FileHelper::createDirectory($path);
+        }
+
         $this->image->saveAs(Yii::getAlias($path . $name . '.' . $this->image->extension));
     }
 
     public function deleteImage()
     {
-        $img = glob(Yii::getAlias('@frontend') . '/web/images/' . $this->id . '.*');
+        $img = glob(Yii::getAlias('@frontend') . '/web/images/news/' . $this->id . '.*');
 
         if ($img) {
             @unlink($img[0]);
         }
+    }
+
+    public function getImage()
+    {
+        $img = '/frontend/web/images/news/' . $this->id . '.jpg';
+        return $img;
     }
 
 }

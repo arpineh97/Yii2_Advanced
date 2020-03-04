@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'description')->textarea(['rows' => 7]) ?>
 
     <?= $form->field($model, 'image')->widget(FileInput::class, [
         'options' => ['accept' => 'image/*'],

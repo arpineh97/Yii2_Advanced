@@ -29,7 +29,9 @@ class m200226_100429_news extends Migration
             'id' => $this->primaryKey(),
             'title'=>$this->string(),
             'description'=>$this->string(),
-            'image'=>$this->string()
+            'created_at'=>$this->integer(),
+            'updated_at'=>$this->integer(),
+            'hits'=>$this->integer()->defaultValue(0),
         ]);
     }
 

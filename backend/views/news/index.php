@@ -4,8 +4,6 @@ use kartik\file\FileInput;
 use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\grid\GridView;
-
-
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\NewsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -37,9 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function($model){
                     return '<img 
-                        src="/frontend/web/images/' . $model->id . ".jpg" . '" 
+                        src="' . $model->getImage() . '" 
                         height="100" width="100"
-                        alt="' . $model->id . ".jpg" . '"
+                        alt="' . $model->getImage() . '"
                         >';
                 }
             ],

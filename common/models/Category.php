@@ -53,9 +53,26 @@ class Category extends \yii\db\ActiveRecord
         return $this->hasMany(NewsCategory::class, ['categories_id' => 'id']);
     }
 
+
+    public function getTop()
+    {
+        return $this->hasMany(News::class, ['id' => 'news_id'])
+            ->via('newsCategories')
+            ->orderBy(['hits'=>SORT_DESC])->one();
+    }
+
+
+    public function getLimitNews()
+    {
+        return $this->hasMany(News::class, ['id' => 'news_id'])
+            ->via('newsCategories')
+            ->where(['!=','id',$this->getTop()->id]);
+    }
+
     public function getNews()
     {
-        return $this->hasMany(News::class, ['id' => 'news_id'])->via('newsCategory');
+        return $this->hasMany(News::class, ['id' => 'news_id'])
+            ->via('newsCategories');
     }
 
 }

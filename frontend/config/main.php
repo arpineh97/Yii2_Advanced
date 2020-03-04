@@ -42,6 +42,7 @@ return [
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
+                'site/category/<id:\d+>' => 'site/category',
                 '<controller:\w+>/<action:\w+>/' => '<controller>/<action>',
             ],
         ],
