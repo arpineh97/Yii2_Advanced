@@ -73,7 +73,7 @@ class News extends \yii\db\ActiveRecord
                 'type' => 'news',
                 'extension' => 'jpg',
                 'directory' => $path,
-                'url' => '/frontend/web/images/news/gallery/',
+                'url' => '/images/news/gallery/',
                 'versions' => [
                     'small' => function ($img) {
                         /** @var \Imagine\Image\ImageInterface $img */
@@ -115,14 +115,14 @@ class News extends \yii\db\ActiveRecord
             ->via('newsCategory');
     }
 
-    public function uploadImage($name)
+    public function uploadImage()
     {
         $path = Yii::getAlias('@frontend') . '/web/images/news/';
         if (!is_dir($path)) {
             FileHelper::createDirectory($path);
         }
 
-        $this->image->saveAs(Yii::getAlias($path . $name . '.' . $this->image->extension));
+        $this->image->saveAs(Yii::getAlias($path . $this->id . '.' . $this->image->extension));
     }
 
     public function deleteImage()

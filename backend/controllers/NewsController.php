@@ -14,22 +14,10 @@ use zxbodya\yii2\galleryManager\GalleryManagerAction;
 /**
  * NewsController implements the CRUD actions for News model.
  */
-class NewsController extends Controller
+class NewsController extends AdminController
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+
+
     public function actions()
     {
         return [
@@ -108,7 +96,7 @@ class NewsController extends Controller
                 $model->image = UploadedFile::getInstance($model, 'image');
                 if ($model->image) {
                     $model->deleteImage();
-                    $model->uploadImage($model->id);
+                    $model->uploadImage();
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
             }

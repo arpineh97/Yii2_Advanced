@@ -17,6 +17,7 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\HttpException;
 
 /**
  * Site controller
@@ -94,8 +95,11 @@ class SiteController extends Controller
 
     public function actionNews($id)
     {
+
         $news = News::findOne(['id'=>$id]);
-        if ($news) {
+        if($news === null){
+            throw new HttpException(404, 'The requested Item could not be found.');
+        } else {
             $news->hits++;
             $news->save();
         }

@@ -2,6 +2,8 @@
 /* @var $news
 */
 use kv4nt\owlcarousel\OwlCarouselWidget;
+use yii\helpers\Html;
+
 ?>
 <div class="container">
     <h2><?= $news->title ?></h2>
@@ -13,8 +15,7 @@ use kv4nt\owlcarousel\OwlCarouselWidget;
 <div class="container">
     <h3>Pictures from zxbodya/yii2-gallery-manager</h3>
     <?php foreach($news->getBehavior('galleryBehavior')->getImages() as $image) : ?>
-        <?php $link = '/frontend/web/images/news/gallery/' . $news->id .'/' . $image->id . '/small.jpg'; ?>
-        <img src="<?= $link ?>" alt="small.jpg" >
+    <?= Html::img($image->getUrl('small')); ?>
     <?php endforeach;?>
 
 </div>
