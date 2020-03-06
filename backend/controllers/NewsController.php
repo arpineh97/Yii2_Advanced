@@ -9,6 +9,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use zxbodya\yii2\galleryManager\GalleryManagerAction;
 
 /**
  * NewsController implements the CRUD actions for News model.
@@ -29,7 +30,17 @@ class NewsController extends Controller
             ],
         ];
     }
-
+    public function actions()
+    {
+        return [
+            'galleryApi' => [
+                'class' => GalleryManagerAction::class,
+                'types' => [
+                    'news' => News::class
+                ]
+            ],
+        ];
+    }
     /**
      * Lists all News models.
      * @return mixed
@@ -139,4 +150,5 @@ class NewsController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
 }

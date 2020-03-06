@@ -5,7 +5,7 @@ namespace common\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\helpers\FileHelper;
-use yii\web\UploadedFile;
+use zxbodya\yii2\galleryManager\GalleryBehavior;
 
 /**
  * This is the model class for table "news".
@@ -59,9 +59,42 @@ class News extends \yii\db\ActiveRecord
 
     public function behaviors()
     {
+        $path = Yii::getAlias('@frontend') . '/web/images/news/gallery/';
+        if (!is_dir($path)) {
+            mkdir($path, 0777, true);
+        }
+
         return [
+
             TimestampBehavior::class,
-        ];
+
+            'galleryBehavior' => [
+                'class' => GalleryBehavior::class,
+                'type' => 'news',
+                'extension' => 'jpg',
+                'directory' => $path,
+                'url' => '/frontend/web/images/news/gallery/',
+                'versions' => [
+                    'small' => function ($img) {
+                        /** @var \Imagine\Image\ImageInterface $img */
+                        return $img
+                            ->copy()
+                            ->thumbnail(new \Imagine\Image\Box(200, 200));
+                    },
+                    'medium' => function ($img) {
+                        /** @var \Imagine\Image\ImageInterface $img */
+                        $dstSize = $img->getSize();
+                        $maxWidth = 800;
+                        if ($dstSize->getWidth() > $maxWidth) {
+                            $dstSize = $dstSize->widen($maxWidth);
+                        }
+                        return $img
+                            ->copy()
+                            ->resize($dstSize);
+                    },
+                ]
+            ]
+            ];
     }
 
     /**
@@ -103,8 +136,7 @@ class News extends \yii\db\ActiveRecord
 
     public function getImage()
     {
-        $img = '/frontend/web/images/news/' . $this->id . '.jpg';
-        return $img;
+        return '/frontend/web/images/news/' . $this->id . '.jpg';
     }
 
 }

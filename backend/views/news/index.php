@@ -1,7 +1,5 @@
 <?php
 
-use kartik\file\FileInput;
-use yii\widgets\ActiveForm;
 use yii\helpers\Html;
 use yii\grid\GridView;
 /* @var $this yii\web\View */

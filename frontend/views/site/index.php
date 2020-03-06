@@ -1,8 +1,8 @@
 <?php
 
-/* @var $this yii\web\View */
-
 use frontend\widgets\CategoryWidget;
+
+/* @var $this yii\web\View */
 
 $this->title = 'Sport News';
 ?>
@@ -14,6 +14,7 @@ $this->title = 'Sport News';
                 <?= CategoryWidget::widget(['id'=>1]) ?>
                 <?= CategoryWidget::widget(['id'=>2]) ?>
                 <?= CategoryWidget::widget(['id'=>3]) ?>
+
             </div>
         </div>
     </div>
