@@ -1,7 +1,7 @@
 <?php
-/* @var $news
-*/
-use kv4nt\owlcarousel\OwlCarouselWidget;
+
+/* @var $news */
+
 use yii\helpers\Html;
 
 ?>

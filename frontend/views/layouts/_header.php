@@ -21,8 +21,11 @@ $categories = Category::find()->all();
         <div class="header-section">
             <div class="row">
                 <div class="col-md-3">
-                    <div class="logo">
-                        <a  href="/site/index"><img class="img-responsive" src="/images/img/logo.png" alt=""></a>
+                    <div class="logo" style="font-size: 20px;">
+                        <b>
+                            <a  href="/site/index" style="padding-right: 20px">HOME</a>
+                            <a href="/site/favorite">Favorite News</a>
+                        </b>
                     </div>
                 </div>
             </div>

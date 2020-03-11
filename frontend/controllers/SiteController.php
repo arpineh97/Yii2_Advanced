@@ -17,7 +17,10 @@ use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+use yii\web\Cookie;
 use yii\web\HttpException;
+use yii\web\Request;
+use yii\web\Response;
 
 /**
  * Site controller
@@ -31,7 +34,7 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::className(),
+                'class' => AccessControl::class,
                 'only' => ['logout', 'signup'],
                 'rules' => [
                     [
@@ -47,7 +50,7 @@ class SiteController extends Controller
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::className(),
+                'class' => VerbFilter::class,
                 'actions' => [
                     'logout' => ['post'],
                 ],
@@ -93,10 +96,34 @@ class SiteController extends Controller
         return $this->render('category',compact('dataProvider', 'category'));
     }
 
+    public function beforeAction($action) {
+        $this->enableCsrfValidation = false;
+        return parent::beforeAction($action);
+    }
+
+    public function actionFavorite()
+    {
+        return $this->render('favorite');
+    }
+
+    public function actionAjax()
+    {
+        $all = [];
+        if (Yii::$app->request->isAjax) {
+            $data = Yii::$app->request->post('top');
+            $cookie = new Cookie([
+                'name' => 'name' . $data,
+                'value' => $data,
+                'expire' => time() + 1000,
+            ]);
+            Yii::$app->getResponse()->getCookies()->add($cookie);
+        }
+    }
+
     public function actionNews($id)
     {
 
-        $news = News::findOne(['id'=>$id]);
+        $news = News::findOne(['id' => $id]);
         if($news === null){
             throw new HttpException(404, 'The requested Item could not be found.');
         } else {
