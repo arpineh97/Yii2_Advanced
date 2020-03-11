@@ -19,8 +19,6 @@ use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\web\Cookie;
 use yii\web\HttpException;
-use yii\web\Request;
-use yii\web\Response;
 
 /**
  * Site controller
@@ -108,7 +106,6 @@ class SiteController extends Controller
 
     public function actionAjax()
     {
-        $all = [];
         if (Yii::$app->request->isAjax) {
             $data = Yii::$app->request->post('top');
             $cookie = new Cookie([
@@ -116,7 +113,16 @@ class SiteController extends Controller
                 'value' => $data,
                 'expire' => time() + 1000,
             ]);
+
+            $cookies = Yii::$app->request->cookies;
+
+            if (isset($cookies[$cookie->name])){
+                $cookies->readOnly=false;
+                $cookies->remove($cookie);
+            }
+
             Yii::$app->getResponse()->getCookies()->add($cookie);
+
         }
     }
 
