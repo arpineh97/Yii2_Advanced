@@ -21,7 +21,7 @@ else {
         <?php foreach ($cookies as $cookie) : ?>
             <?php if (true) : ?>
                 <?php if ($cookie->name == '_csrf-frontend') continue; ?>
-                <?php $id = $cookie->value /* substr($cookie->name, 4)*/; ?>
+                <?php $id = $cookie->value; ?>
                 <?php $allNews = $news->where(['in', 'id', $id]) ; ?>
                 <div class="container">
                     <?= ListView::widget([
