@@ -1,10 +1,13 @@
 <?php
 namespace frontend\controllers;
 
+use PhpSets\Set;
 use common\models\Category;
 use common\models\News;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
+use phpDocumentor\Reflection\Types\Integer;
+use phpDocumentor\Reflection\Types\This;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\data\ActiveDataProvider;
@@ -19,12 +22,14 @@ use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\web\Cookie;
 use yii\web\HttpException;
+use function Sodium\add;
 
 /**
  * Site controller
  */
 class SiteController extends Controller
 {
+
     /**
      * {@inheritdoc}
      */
@@ -101,29 +106,59 @@ class SiteController extends Controller
 
     public function actionFavorite()
     {
-        return $this->render('favorite');
+        $news = News::find();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $news,
+            'pagination' => [
+                'pageSize' => 5,
+            ]
+        ]);
+        return $this->render('favorite',  compact('dataProvider', 'news'));
+    }
+
+    public function createCookie($val) {
+
     }
 
     public function actionAjax()
     {
         if (Yii::$app->request->isAjax) {
-            $data = Yii::$app->request->post('top');
-            $cookie = new Cookie([
-                'name' => 'name' . $data,
-                'value' => $data,
-                'expire' => time() + 1000,
-            ]);
+
+            $id = Yii::$app->request->post('top');
 
             $cookies = Yii::$app->request->cookies;
+            $cookies->readOnly = false;
+            $values = [];
 
-            if (isset($cookies[$cookie->name])){
-                $cookies->readOnly=false;
+            if (isset($cookies['favorites'])) {
+                $arr = $cookies->getValue('favorites');
+                foreach ($arr as $value) {
+                    $values[] = $value;
+                }
+            }
+
+            if (in_array($id, $values)) {
+                $searchResult = array_search($id, $values);
+                unset($values[$searchResult]);
+            } else {
+                $values[] = $id;
+            }
+
+//            var_dump($values);
+
+                $cookie = new Cookie([
+                    'name' => 'favorites',
+                    'value' => $values,
+                ]);
+
+            if (isset($cookies[$cookie->name]) && empty($values)) {
                 $cookies->remove($cookie);
             }
 
             Yii::$app->getResponse()->getCookies()->add($cookie);
 
         }
+
     }
 
     public function actionNews($id)

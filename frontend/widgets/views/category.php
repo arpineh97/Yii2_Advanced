@@ -14,7 +14,7 @@
                             <div class="news_item_title">
                                 <h3>
                                     <button id="<?= $category->top->id ?>" class="favorite_icon">
-                                        <i id="star" class="fa fa-star-o"></i>
+                                        <i id="star<?= $category->top->id ?>" class="fa fa-star-o"></i>
                                     </button>
                                     <a href="/site/news/<?= $category->top->id ?>"><?= $category->top->title ?></a>
                                 </h3>
@@ -41,7 +41,7 @@
                                 <div class="media-body">
                                     <h3 class="media-heading">
                                         <button id="<?= $catNews->id ?>" class="favorite_icon">
-                                            <i class="fa fa-star-o"></i>
+                                            <i id="star<?= $catNews->id ?>" class="fa fa-star-o"></i>
                                         </button>
                                         <a href="/site/news/<?= $catNews->id ?>">
                                             <?= $catNews->title ?>
@@ -65,6 +65,13 @@
 <script>
 
     $('#<?= $category->top->id ?>').click(function () {
+
+            if(document.getElementById('star'+<?= $category->top->id ?>).className === "fa fa-star-o") {
+                document.getElementById('star'+<?= $category->top->id ?>).className = "fa fa-star";
+            } else {
+                document.getElementById('star'+<?= $category->top->id ?>).className = "fa fa-star-o";
+            }
+
         var id = this.id;
 
         $.ajax({
@@ -84,6 +91,13 @@
     <?php foreach($category->limitNews as $catNews): ?>
 
     $('#<?= $catNews->id ?>').click(function () {
+
+        if(document.getElementById('star'+<?= $catNews->id ?>).className === "fa fa-star-o") {
+            document.getElementById('star'+<?= $catNews->id ?>).className = "fa fa-star";
+        } else {
+            document.getElementById('star'+<?= $catNews->id ?>).className = "fa fa-star-o";
+        }
+
         var id = this.id;
 
         $.ajax({
@@ -101,6 +115,5 @@
 
     <?php endforeach;?>
     <?php endif;?>
-
 
 </script>
