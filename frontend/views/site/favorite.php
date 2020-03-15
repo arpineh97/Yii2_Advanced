@@ -3,9 +3,7 @@
 /* @var $dataProvider
  * @var $news
  */
-//debug($dataProvider);
-//debug($news[0]->title);
-use common\models\News;
+
 use yii\web\NotFoundHttpException;
 use yii\widgets\ListView;
 
